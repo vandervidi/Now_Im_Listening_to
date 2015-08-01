@@ -25,19 +25,23 @@ exports.get_list_of_songs = function(request, response){
 	FB.api('534674899917897/feed', function (res) {
 	  if(!res || res.error) {
 	    console.log(!res ? 'error occurred' : res.error);
-	    return;
+	    response.json({status: 0 });
+	    return 1;
 	  }
-	  
 	  for(song in res.data){
 	  	// save user id number
-	  		ytUrl = res.data[song].link;
-	  		if(ytUrl.indexOf("www.youtube.com") > -1){
-	  			ytUrl = ytUrl.split("=")[1].split("&")[0];
-	  			console.log(ytUrl)
+	  	try{
+		  		ytUrl = res.data[song].link;
+		  		if(ytUrl.indexOf("www.youtube.com") > -1){
+		  			ytUrl = ytUrl.split("=")[1].split("&")[0];
+		  			console.log(ytUrl)
 
-	  		}else if(ytUrl.indexOf("youtu.be") > -1){
-	  			ytUrl = ytUrl.split(".be/")[1];
-	  			console.log(ytUrl)
+		  		}else if(ytUrl.indexOf("youtu.be") > -1){
+		  			ytUrl = ytUrl.split(".be/")[1];
+		  			console.log(ytUrl)
+		  		}
+	  		}catch(e){
+	  			continue;
 	  		}
 			data.songs.push(new Element( res.data[song].from.id , ytUrl, res.data[song].from.name, res.data[song].name));
 	  }
