@@ -14,7 +14,7 @@ $(document).ready(function() {
 	
 	$.ajax({
 		type : "GET",
-		url : 'http://127.0.0.1:8080/getSongsList',
+		url : 'https://nilt.herokuapp.com/getSongsList',
 		success : function(data) {
 			songsList = data.songs;
 			//Load the first song into the player
