@@ -45,11 +45,11 @@ body {
 	color: #a3daf6;
 }
 
-.navbar-nav > li > a {
+/*.navbar-nav > li > a {
 	color: #a3daf6 !important;
 	font-weight: bold;
 	text-transform: uppercase;
-}
+}*/
 
 .navbar-nav > li > a:hover {
 	color: #FFF !important;
@@ -116,4 +116,16 @@ button > span {
 
 .clear {
 	clear: both;
+}
+
+.highlight a{
+	color: #FFFF7F !important;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+.regular a{
+	color: #a3daf6 !important;
+	font-weight: bold;
+	text-transform: uppercase;
 }

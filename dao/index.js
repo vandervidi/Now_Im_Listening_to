@@ -1,11 +1,10 @@
 var mongoose = require('mongoose');
 //configuring connection to mongoLab
-mongoose.connect('mongodb://admin:1234@ds043942.mongolab.com:43942/songthief');
+mongoose.connect('mongodb://vandervidi:vandervidi87@ds029793.mongolab.com:29793/heroku_x8jh81jv');
 //import schema module
 var playlistSchema = require('./playlistSchema').playlistSchema;
 //configure the imported schema as a model and give it an alias
-mongoose.model('PlaylistM' , playlistSchema);
-var PlaylistM;
+var Playlist = mongoose.model('PlaylistM' , playlistSchema);
 var conn = mongoose.connection;
 
 //Print error message 
@@ -14,52 +13,49 @@ conn.on('error', function(err){
 });
 
 
-//This function connects to the database and returns a list of songs a user stole from his friends
-exports.getSongsIStole = function(req, res){
-	var user = req.body.username.toLowerCase();
-	
-	// find each person with a last name matching 'Ghost', selecting the `name` and `occupation` fields
-	PlaylistM.findOne({ 'username' : user }, 'mySteal', function (err, doc) {
-		if (err) return handleError(err);
-		res.json(doc.mySteal);
-	});
-};
+//This function inserts new songs into the data base and returns the client
+// the list of all songs from the database
+exports.update_db_and_return_all_songs = function(res, data){
+	//Number of songs elements in the array
+	var dataLen = data.songs.length -1;
 
-//This function connects to the database and returns a list of songs stolen from a user
-exports.getSongsStolenFromMe = function(req, res){
-	// find each person with a last name matching 'Ghost', selecting the `name` and `occupation` fields
-	var user = req.body.username.toLowerCase();
-
-	PlaylistM.findOne({ 'username' : user }, 'mySongs', function (err, doc) {
-		if (err) return handleError(err);
-
-		var songsStealed = [];
-		for (var i=0; i<doc.mySongs.length; i++){
-			//console.log(doc.mySongs[i])
-			if (doc.mySongs[i].stolen){
-				songsStealed.push(doc.mySongs[i]);
-			}
-		}
-		res.json(songsStealed);
-	});
-};
-
-//This function connects to the database and checks if the credentials the user supplied
-//are valid.
-exports.connect = function(req,res){
-	var query = PlaylistM.find().and([{ username: req.body.username }, { password: req.body.password }])
-	.exec(function(err, docs){
-			if (err) return res.json({connection: 2});
-			if (docs.length)		
-				 res.json({connection: 1});
-			else
-				 res.json({connection: 0});
+	//This will iterate as the number of songs are retrieved from facebook
+	// Then it will push the ones that do are not in the database.
+	//Then it will return the client the whole songs database in a descending order
+	for(var i = dataLen; i >= 0; i--){
+		// Insert new songs into the database
+		Playlist.update({	
+			'url': data.songs[i].youtubeVideoId,
+			'publishedBy': data.songs[i].name			
+		},{
+			'url': data.songs[i].youtubeVideoId,
+			'publishedBy': data.songs[i].name,
+			'title': data.songs[i].title,
+			'profilePic': data.songs[i].userFacebookPic
+		}, {upsert: true}, function(err, doc) {
+		  if (err) {
+		    console.log('got an error in findOneAndUpdate');
+		  }
 		});
+
+		//When the last element is reached , send with the response object 
+		//the list of all songs
+		if(i==0){
+			Playlist.find().sort({'_id' : -1}).exec( function(err, songs){
+				if(err){
+					console.log("Error in find query", err);
+					res.json({success: 0});
+				}
+				res.json({success: 1, songs: songs});
+			});
+		}
+	};
+
 };
 
 //once a connection is initiated - do the following
 conn.once('open' , function(){
-	console.log('connected');
+	console.log('connected to mongoLab');
 	PlaylistM = this.model('PlaylistM');
 });
 
@@ -70,4 +66,3 @@ process.on('SIGINT', function() {
     process.exit(0);
   });
 });
-

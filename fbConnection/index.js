@@ -1,3 +1,4 @@
+var dao = require('../dao');
 var FB = require('fb');
 FB.api('oauth/access_token', {
     client_id: '787065624747435',	// FB app id
@@ -34,18 +35,16 @@ exports.get_list_of_songs = function(request, response){
 		  		ytUrl = res.data[song].link;
 		  		if(ytUrl.indexOf("www.youtube.com") > -1){
 		  			ytUrl = ytUrl.split("=")[1].split("&")[0];
-		  			console.log(ytUrl)
-
+		  			
 		  		}else if(ytUrl.indexOf("youtu.be") > -1){
 		  			ytUrl = ytUrl.split(".be/")[1];
-		  			console.log(ytUrl)
 		  		}
 	  		}catch(e){
 	  			continue;
 	  		}
 			data.songs.push(new Element( res.data[song].from.id , ytUrl, res.data[song].from.name, res.data[song].name));
 	  }
-	  response.json(data);
+	  dao.update_db_and_return_all_songs(response, data);
 	});
 }
 

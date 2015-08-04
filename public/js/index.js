@@ -9,20 +9,22 @@ $(document).ready(function() {
 	$.ajax({
 		type : "GET",
 		url : 'https://nilt.herokuapp.com/getSongsList',
+		//url : 'http://localhost:8080/getSongsList',
 		success : function(data) {
-			//Loading the Youtube iFrame API
-			var tag = document.createElement('script');
-			tag.src = "https://www.youtube.com/player_api";
-			var firstScriptTag = document.getElementsByTagName('script')[0];
-			firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-			songsList = data.songs;
-			//Load the first song into the player
-			//player.loadVideoById(songsList[currSongPosition].youtubeVideoId);
-			//Update publisher info
-			updatePublisherInfo(songsList[currSongPosition].userFacebookPic, songsList[currSongPosition].name);
-			//update song title
-			updateSongName(songsList[currSongPosition].title);
+			if(data.success){
+				//Loading the Youtube iFrame API
+				var tag = document.createElement('script');
+				tag.src = "https://www.youtube.com/player_api";
+				var firstScriptTag = document.getElementsByTagName('script')[0];
+				firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+				songsList = data.songs;
+				//Load the first song into the player
+				//player.loadVideoById(songsList[currSongPosition].url);
+				//Update publisher info
+				updatePublisherInfo(songsList[currSongPosition].profilePic, songsList[currSongPosition].publishedBy);
+				//update song title
+				updateSongName(songsList[currSongPosition].title);
+			}
 		},
 		error : function(objRequest, errortype) {
 			console.log("ERROR:: Could not get list of songs. Error description: ", errortype);
@@ -55,10 +57,10 @@ $(document).ready(function() {
 		currSongPosition = 0;
 
 		//Load the first song into the player
-		player.loadVideoById(songsList[currSongPosition].youtubeVideoId);
+		player.loadVideoById(songsList[currSongPosition].url);
 
 		//Update publisher info
-		updatePublisherInfo(songsList[currSongPosition].userFacebookPic, songsList[currSongPosition].name);
+		updatePublisherInfo(songsList[currSongPosition].profilePic, songsList[currSongPosition].publishedBy);
 
 		//update song title
 		updateSongName(songsList[currSongPosition].title);
@@ -70,7 +72,7 @@ function onYouTubePlayerAPIReady() {
 	player = new YT.Player('player', {
 		height : '390',
 		width : '640',
-		videoId : songsList[currSongPosition].youtubeVideoId,
+		videoId : songsList[currSongPosition].url,
 		playerVars : {
 			'iv_load_policy' : 3,
 			'autohide' : 1,
@@ -127,13 +129,13 @@ function loadNextVideo() {
 	}
 
 	//Update publisher info
-	updatePublisherInfo(songsList[currSongPosition].userFacebookPic, songsList[currSongPosition].name);
+	updatePublisherInfo(songsList[currSongPosition].profilePic, songsList[currSongPosition].publishedBy);
 
 	//update song title
 	updateSongName(songsList[currSongPosition].title);
 
 	if (player) {
-		player.loadVideoById(songsList[currSongPosition].youtubeVideoId);
+		player.loadVideoById(songsList[currSongPosition].url);
 	}
 }
 
@@ -150,14 +152,14 @@ function loadPrevVideo() {
 	}
 
 	//Update publisher info
-	updatePublisherInfo(songsList[currSongPosition].userFacebookPic, songsList[currSongPosition].name);
+	updatePublisherInfo(songsList[currSongPosition].profilePic, songsList[currSongPosition].publishedBy);
 
 	//update song title
 	updateSongName(songsList[currSongPosition].title);
 
 	//loadInfo(trackInfo[i].id);
 	if (player) {
-		player.loadVideoById(songsList[currSongPosition].youtubeVideoId);
+		player.loadVideoById(songsList[currSongPosition].url);
 	}
 }
 
