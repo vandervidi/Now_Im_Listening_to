@@ -55,7 +55,7 @@ exports.update_db_and_return_all_songs = function(res, data){
 
 //once a connection is initiated - do the following
 conn.once('open' , function(){
-	console.log('connected to mongoLab');
+	console.log('connected to mongoLab nilt');
 	PlaylistM = this.model('PlaylistM');
 });
 
