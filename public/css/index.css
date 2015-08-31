@@ -29,7 +29,8 @@ body {
 }
 
 #topNavigationBar, #bottomNavigationBar {
-	background-color: #326899;
+	/*background-color: #326899;*/
+	background: rgba(50,104,153, 0.5);
 	border: 0px;
 	border-radius: 0px;
 	z-index: 1;

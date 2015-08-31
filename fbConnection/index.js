@@ -33,7 +33,7 @@ exports.get_list_of_songs = function(request, response){
 	  	// save user id number
 	  	try{
 		  		ytUrl = res.data[song].link;
-		  		if(ytUrl.indexOf("www.youtube.com") > -1 || ytUrl.indexOf("m.youtube.com/") > -1){
+		  		if(ytUrl.indexOf("www.youtube.com") > -1 || ytUrl.indexOf("m.youtube.com") > -1){
 		  			ytUrl = ytUrl.split("=")[1].split("&")[0];
 		  			
 		  		}else if(ytUrl.indexOf("youtu.be") > -1){
