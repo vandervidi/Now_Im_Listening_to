@@ -18,9 +18,9 @@ FB.api('oauth/access_token', {
 
 exports.get_list_of_songs = function(request, response){
 	var ytUrl,
-	data = {
-		songs: []
-	};
+		data = {
+			songs: []
+		};
 
 	//Make an API requet and get the FB group data from the Graph
 	FB.api('534674899917897/feed', function (res) {
@@ -29,6 +29,7 @@ exports.get_list_of_songs = function(request, response){
 	    response.json({status: 0 });
 	    return 1;
 	  }
+	  
 	  for(song in res.data){
 	  	// save user id number
 	  	try{
