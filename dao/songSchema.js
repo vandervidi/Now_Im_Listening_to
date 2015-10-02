@@ -3,7 +3,7 @@ var schema = mongoose.Schema;
 /*
 * Configuring a playlist DB schema
 */
-var playlistSchema = new schema({
+var songSchema = new schema({
 	
 	url: {type: String, required: true},
 	publishedBy: {type: String, required: true},
@@ -11,4 +11,4 @@ var playlistSchema = new schema({
 	profilePic: {type: String, required: true}
 }, {collection: 'songs'});
 
-exports.playlistSchema = playlistSchema;
+exports.songSchema = songSchema;
