@@ -41,7 +41,7 @@ exports.get_list_of_songs = function(request, response){
 	  		ytUrl = res.data[song].link;
 	  		
 	  		if(ytUrl.indexOf(".youtube.com") > -1){
-	  			ytUrl = ytUrl.split("=")[1].split("&")[0];
+	  			ytUrl = ytUrl.split("v=")[1].split("&")[0];
 	  		}
 
 	  		else if(ytUrl.indexOf("youtu.be") > -1){
